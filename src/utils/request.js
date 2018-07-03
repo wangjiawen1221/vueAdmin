@@ -2,10 +2,19 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import qs from 'qs'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
+  baseURL: 'http://www.vueapi.cc/api/v1', // api的base_url
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Access-Control-Allow-Origin': '*'
+  },
+  transformRequest: [function(data){
+    data = qs.stringify(data);
+    return data;
+  }],
   timeout: 15000 // 请求超时时间
 })
 
@@ -27,8 +36,9 @@ service.interceptors.response.use(
   /**
   * code为非20000是抛错 可结合自己业务进行修改
   */
+    console.log(response)
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.code !== 2000) {
       Message({
         message: res.message,
         type: 'error',

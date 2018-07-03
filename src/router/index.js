@@ -29,7 +29,7 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
+    name: '管理后台',
     hidden: true,
     children: [{
       path: 'dashboard',
@@ -41,14 +41,14 @@ export const constantRouterMap = [
     path: '/example',
     component: Layout,
     redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    name: '采集管理',
+    meta: { title: '采集管理', icon: 'example' },
     children: [
       {
         path: 'table',
-        name: 'Table',
+        name: '采集列表',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '采集列表', icon: 'table' }
       },
       {
         path: 'tree',
