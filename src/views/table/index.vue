@@ -16,12 +16,12 @@
           <span>{{scope.row.times}}/天</span>
         </template>
       </el-table-column>
-      <el-table-column label="采集进度" width="110" align="center">
+      <el-table-column label="采集进度" width="200" align="center">
         <template slot-scope="scope">
-          {{scope.row.pageviews}}
+          {{scope.row.list}}/{{scope.row.total}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column class-name="status-col" label="状态" width="200" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{scope.row.status | textFilter}}</el-tag>
         </template>
@@ -36,12 +36,12 @@
             <el-button
               size="small"
               type="primary"
-              @click="" v-if="scope.row.status==1" >采集开启
+              @click="handleCollect(scope.row.id,start)" v-if="scope.row.status==1" :disabled="start" >采集开启
             </el-button>
             <el-button
               size="small"
               type="primary"
-              @click="" v-if="scope.row.status!=1">采集关闭
+              @click="handleCollectStop(scope.row.id,stop)" v-if="scope.row.status==2" :disabled="stop">采集关闭
             </el-button>
           </template>
       </el-table-column>
@@ -75,13 +75,15 @@
 </template>
 
 <script>
-import { getList,upConfig } from '@/api/table'
+import { getList,upConfig,startCollect,stopCollect } from '@/api/table'
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true,
+      start:false,
+      stop:false,
       editform:{times:0},
       formLabelWidth:'80',
       dialogFormVisible: false,
@@ -110,7 +112,7 @@ export default {
       const statusMap = {
         1: '待采集',
         2: '正在采集',
-        0: '采集出错'
+        0: '采集对列准备中'
       }
       return statusMap[text]
     }
@@ -152,6 +154,30 @@ export default {
           this.$message('FALSE');
         }
         this.editform.loadingSaveProduct = false;
+        this.fetchData();
+      });
+    },
+    handleCollect(id,start) {
+      this.start = true;
+      console.log(id);
+      startCollect(id).then(res=>{
+        if(res&&res.code=='2000') {
+          this.$message('采集开启成功');
+        }else{
+          this.$message('采集开启失败');
+        }
+        this.fetchData();
+      });
+    },
+    handleCollectStop(id,stop){
+      this.stop=true;
+      console.log(id);
+      stopCollect(id).then(res=>{
+        if(res&&res.code=='2000') {
+          this.$message('关闭成功');
+        }else{
+          this.$message('关闭失败');
+        }
         this.fetchData();
       });
     },
