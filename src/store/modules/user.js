@@ -27,12 +27,12 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+      const username = userInfo.username.trim();
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
+          const data = response.data;
+          setToken(data.token);
+          commit('SET_TOKEN', data.token);
           resolve()
         }).catch(error => {
           reject(error)
@@ -44,10 +44,10 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response.data
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          const data = response.data;
+          commit('SET_ROLES', data.roles);
+          commit('SET_NAME', data.name);
+          commit('SET_AVATAR', data.avatar);
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -59,9 +59,9 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
+          commit('SET_TOKEN', '');
+          commit('SET_ROLES', []);
+          removeToken();
           resolve()
         }).catch(error => {
           reject(error)
@@ -72,12 +72,12 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
-        removeToken()
+        commit('SET_TOKEN', '');
+        removeToken();
         resolve()
       })
     }
   }
-}
+};
 
 export default user

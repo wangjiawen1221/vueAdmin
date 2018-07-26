@@ -21,6 +21,6 @@ const app = {
       commit('TOGGLE_SIDEBAR')
     }
   }
-}
+};
 
 export default app

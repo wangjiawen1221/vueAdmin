@@ -15,9 +15,9 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, { locale });
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   el: '#app',
@@ -25,4 +25,4 @@ new Vue({
   store,
   template: '<App/>',
   components: { App }
-})
+});

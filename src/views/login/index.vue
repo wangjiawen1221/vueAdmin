@@ -42,14 +42,14 @@ export default {
       } else {
         callback()
       }
-    }
+    };
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
         callback()
       }
-    }
+    };
     return {
       loginForm: {
         username: 'admin',
@@ -74,15 +74,15 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
+          this.loading = true;
           this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false
+            this.loading = false;
             this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.log('error submit!!');
           return false
         }
       })

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-const delta = 15
+const delta = 15;
 
 export default {
   name: 'scrollBar',
@@ -18,11 +18,11 @@ export default {
   },
   methods: {
     handleScroll(e) {
-      const eventDelta = e.wheelDelta || -e.deltaY * 3
-      const $container = this.$refs.scrollContainer
-      const $containerHeight = $container.offsetHeight
-      const $wrapper = this.$refs.scrollWrapper
-      const $wrapperHeight = $wrapper.offsetHeight
+      const eventDelta = e.wheelDelta || -e.deltaY * 3;
+      const $container = this.$refs.scrollContainer;
+      const $containerHeight = $container.offsetHeight;
+      const $wrapper = this.$refs.scrollWrapper;
+      const $wrapperHeight = $wrapper.offsetHeight;
       if (eventDelta > 0) {
         this.top = Math.min(0, this.top + eventDelta)
       } else {

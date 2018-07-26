@@ -41,3 +41,14 @@ export function stopCollect(id){
     }
   });
 }
+
+//重新开启失败采集
+export function startFails(id){
+  return request({
+    url:'/Supplier/StartFails',
+    method: 'post',
+    params:{
+      id
+    }
+  });
+}

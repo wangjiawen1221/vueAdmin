@@ -21,6 +21,16 @@
           {{scope.row.list}}/{{scope.row.total}}
         </template>
       </el-table-column>
+      <el-table-column label="失败次数" width="200" align="center">
+        <template slot-scope="scope">
+          {{scope.row.fails}} ||
+          <el-button
+            size="small"
+            type="primary"
+            @click="handleFails(scope.row.id,fails)" v-if="scope.row.fails && scope.row.status==3" :disabled="fails">失败重启
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="200" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{scope.row.status | textFilter}}</el-tag>
@@ -41,7 +51,7 @@
             <el-button
               size="small"
               type="primary"
-              @click="handleCollectStop(scope.row.id,stop)" v-if="scope.row.status==2" :disabled="stop">采集关闭
+              @click="handleCollectStop(scope.row.id,stop)" v-if="scope.row.status==2||scope.row.status==3" :disabled="stop">采集关闭
             </el-button>
           </template>
       </el-table-column>
@@ -75,7 +85,7 @@
 </template>
 
 <script>
-import { getList,upConfig,startCollect,stopCollect } from '@/api/table'
+import { getList,upConfig,startCollect,stopCollect,startFails } from '@/api/table'
 
 export default {
   data() {
@@ -84,6 +94,7 @@ export default {
       listLoading: true,
       start:false,
       stop:false,
+      fails:false,
       editform:{times:0},
       formLabelWidth:'80',
       dialogFormVisible: false,
@@ -104,16 +115,18 @@ export default {
       const statusMap = {
         1: 'success',
         2: 'gray',
-        0: 'danger'
-      }
+        0: 'danger',
+        3: 'success'
+      };
       return statusMap[status]
     },
     textFilter(text){
       const statusMap = {
         1: '待采集',
         2: '正在采集',
-        0: '采集对列准备中'
-      }
+        0: '采集对列准备中',
+        3: '采集完成'
+      };
       return statusMap[text]
     }
   },
@@ -122,9 +135,9 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = true
+      this.listLoading = true;
       getList(this.listQuery).then(response => {
-        this.list = response.data.items
+        this.list = response.data.items;
         this.listLoading = false
       })
     },
@@ -177,6 +190,18 @@ export default {
           this.$message('关闭成功');
         }else{
           this.$message('关闭失败');
+        }
+        this.fetchData();
+      });
+    },
+    handleFails(id,fails) {
+//      console.log(id);
+      this.fails=true;
+      startFails(id).then(res=>{
+        if(res&&res.code=='2000') {
+          this.$message('失败开启成功');
+        }else{
+          this.$message('失败开启失败');
         }
         this.fetchData();
       });
