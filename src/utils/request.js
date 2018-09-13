@@ -6,8 +6,9 @@ import qs from 'qs'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://192.168.10.9/vueApi/public/api/v1/', // api的base_url
+  baseURL: 'http://47.74.236.131/vueApi/public/api/v1/', // api的base_url
   headers: {
+    'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/x-www-form-urlencoded',
     'Access-Control-Allow-Origin': '*'
   },

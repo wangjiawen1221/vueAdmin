@@ -25,6 +25,9 @@ const user = {
   },
 
   actions: {
+    setAvatar : ({ commit },img ) =>{
+      commit('SET_AVATAR',img)
+    },
     // 登录
     Login({ commit }, userInfo) {
       const username = userInfo.username.trim();

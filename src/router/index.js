@@ -41,14 +41,20 @@ export const constantRouterMap = [
     path: '/example',
     component: Layout,
     redirect: '/example/table',
-    name: '采集管理',
-    meta: { title: '采集管理', icon: 'example' },
+    name: '列表管理',
+    meta: { title: '列表管理', icon: 'example' },
     children: [
       {
         path: 'table',
         name: '采集列表',
         component: () => import('@/views/table/index'),
         meta: { title: '采集列表', icon: 'table' }
+      },
+      {
+        path: 'adlist',
+        name: '广告列表',
+        component: () => import('@/views/adlist/index'),
+        meta: { title: '广告列表', icon: 'table' }
       },
       {
         path: 'tree',
