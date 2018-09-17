@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <div class="headerEditer">
+      <el-button type="primary" icon="el-icon-plus" @click="handlePlus">新建广告</el-button>
+      <el-input
+        placeholder="请输入关键字"
+        v-model="search"
+        clearable
+        @clear="handleSearch" style="margin-left:30px;">
+      </el-input>
+      <el-button type="primary" icon="el-icon-search" @click="handleSearch" circle></el-button>
+    </div>
+
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column label="广告id" width="80" align='center'>
         <template slot-scope="scope">
@@ -11,7 +22,7 @@
             <div slot="reference" class="name-wrapper">{{ scope.row.ad_name }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="广告图片" width="350" align='center'>
+      <el-table-column label="广告图片" width="300" align='center'>
         <template slot-scope="scope">
             <img :src="'https://www.51juhe.com'+scope.row.ad_code" width="50" height="50" />
         </template>
@@ -19,6 +30,20 @@
       <el-table-column label="排序" width="80" align='center'>
         <template slot-scope="scope">
             <div class="name-wrapper">{{ scope.row.orderby }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否显示" width="140" align='center'>
+        <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enabled"
+              :active-value="1"
+              :inactive-value="0"
+              active-text="是"
+              inactive-text="否"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="handleChange">
+            </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作" align='center'>
@@ -32,82 +57,55 @@
       </el-table-column>
     </el-table>
 
-    <!-- <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      layout="total, prev, pager, next"
-      :total="total">
-    </el-pagination> -->
+    <!-- 分页 -->
+    <div class="pagination" align='right'>
+      <el-pagination
+        @current-change="handleCurrentChange"
+        background
+        layout="prev, pager, next"
+        :page-size="perpage"
+        :total="total">
+      </el-pagination>
+    </div>
 
-    <!-- 编辑弹出框 S -->
-      <dialog-form :form="form" :show.sync="show"></dialog-form>
-    <!-- 编辑弹出框 E -->
+    <!-- 编辑按钮弹出框 -->
+    <dialog-form :form="form" :show.sync="show" @close="close"></dialog-form>
 
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/adlist'
+import { getList,getSearchList } from '@/api/adlist'
 import imgUrl from '@/assets/logo.png'
 import dialogForm from '@/components/dialogform.vue'
 
 export default {
   data() {
     return {
-      list: [{
-          id: '1',
-          name: '钢柜界的金刚芭比',
-          img:imgUrl,
-          link:'www.baidu.com',
-          color:"#fff",
-          sort:'4'
-        }, {
-          id: '2',
-          name: '会搭讪的培训椅',
-          img:imgUrl,
-          link:'www.sogo.com',
-          color:"#111",
-          sort:'2'
-        }, {
-          id: '3',
-          name: '钢柜专栏',
-          img:imgUrl,
-          link:'www.google.com',
-          color:"#000",
-          sort:'1'
-        }, {
-          id: '4',
-          name: '俱名片pc',
-          img:imgUrl,
-          link:'www.aliyun.com',
-          color:"#555",
-          sort:'3'
-        }
-      ],
+      list: null,
       listLoading: false,
       show: false,
       form: {},
-      fileList: [
-        {
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }
-      ]
+      total:null,
+      perpage:null,
+      pagesize:1,
+      search:""
     }
   },
   components: {
     dialogForm
   },
   mounted:function(){
-    this.fetchData()
+    this.fetchData(this.pagesize)
   },
   methods: {
     //获取列表数据
-    fetchData() {
+    fetchData(params) {
       this.listLoading = true;
-      getList().then(response => {
-        //console.log(response)
-        this.list = response.data.res.data;
+      getList(params).then(res => {
+        this.list = res.data.res.data;
+        this.perpage = res.data.res.per_page
+        this.total = res.data.res.total;
         this.listLoading = false
       })
     },
@@ -119,8 +117,29 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
       console.log(row.name);
+    },
+    handleCurrentChange(val){
+      this.fetchData(val)
+    },
+    close(){
+      this.show = !this.show
+    },
+    handleChange(res){
+      console.log(res)
+    },
+    handlePlus(){
+      this.show = true;
+      this.form = {}
+    },
+    handleSearch(){
+      this.listLoading = true;
+      getSearchList(this.search).then(res => {
+        this.list = res.data.res.data;
+        this.perpage = res.data.res.per_page
+        this.total = res.data.res.total;
+        this.listLoading = false
+      })
     }
-    
   }
 }
 </script>
@@ -129,11 +148,13 @@ export default {
   .el-input{
     width:300px;
   }
-/*  .el-upload-list{
-    float: right;
-    width: 80%;
+  .pagination{
+    margin-top: 15px;
   }
-  .el-upload-list__item{
-    margin-top:0;
-  }*/
+  .el-switch{
+    line-height: 18px;
+  }
+  .headerEditer{
+    margin-bottom: 10px;
+  }
 </style>

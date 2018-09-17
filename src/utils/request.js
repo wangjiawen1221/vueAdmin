@@ -8,7 +8,6 @@ import qs from 'qs'
 const service = axios.create({
   baseURL: 'http://47.74.236.131/vueApi/public/api/v1/', // api的base_url
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/x-www-form-urlencoded',
     'Access-Control-Allow-Origin': '*'
   },
