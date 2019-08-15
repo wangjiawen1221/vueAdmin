@@ -38,7 +38,7 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+        callback()
       } else {
         callback()
       }
@@ -52,8 +52,8 @@ export default {
     };
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -82,6 +82,7 @@ export default {
             this.loading = false
           })
         } else {
+          this.$message.warning("用户名密码错误");
           console.log('error submit!!');
           return false
         }

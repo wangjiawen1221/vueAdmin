@@ -6,7 +6,7 @@ import qs from 'qs'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://47.74.236.131/vueApi/public/api/v1/', // api的base_url
+  baseURL: 'http://www.test.cc/api/v1/', // api的base_url
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Access-Control-Allow-Origin': '*'
@@ -40,7 +40,7 @@ service.interceptors.response.use(
     const res = response.data;
     if (res.code !== 2000) {
       Message({
-        message: res.message,
+        message: res.msg,
         type: 'error',
         duration: 5 * 1000
       });
