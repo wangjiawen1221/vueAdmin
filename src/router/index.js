@@ -21,6 +21,7 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
+
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
@@ -36,11 +37,9 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-
   {
     path: '/example',
     component: Layout,
-    redirect: '/example/table',
     name: '列表管理',
     meta: { title: '列表管理', icon: 'example' },
     children: [
@@ -64,26 +63,93 @@ export const constantRouterMap = [
       }
     ]
   },
-
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/system',
+    component: Layout,
+    name: '系统设置',
+    meta: { title: '系统设置', icon: 'example' },
+    children: [
+      {
+        name: 'group',
+        path: '/system/group',
+        component: () => import('@/views/system/group'),
+      },
+      {
+        path: '/system/rule',
+        name: 'rule',
+        component: () => import('@/views/system/rule'),
+      },
+      {
+        name: 'admin',
+        path: '/system/admin',
+        component: () => import('@/views/system/admin')
+      },
+      {
+        name: 'profile',
+        path: '/system/profile',
+        component: () => import('@/views/system/profile')
+      },
+      {
+        name: 'logslist',
+        path: '/system/logs',
+        component: () => import('@/views/system/logs')
+      },
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ];
 
-export default new Router({
-  // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
+export const vueRoutes = {
+  home: {
+    path: '/',
+    name: 'home',
+    meta: { title: '主页' },
+    component: () => import('@/views/system/rule'),
+  },
+  rule: {
+    path: 'rule',
+    name: '权限管理',
+    meta: { title: '权限管理' },
+    component: () => import('@/views/system/rule'),
+  },
+  admin: {
+    path: 'admin',
+    name: '管理员',
+    meta: { title: '管理员' },
+    component: () => import('@/views/system/admin'),
+  },
+  profile: {
+    path: 'profile',
+    name: '管理员设置',
+    meta: { title: '管理员设置' },
+    component: () => import('@/views/system/profile'),
+  },
+  logs: {
+    path: 'logslist',
+    name: '日志设置',
+    meta: { title: '日志设置' },
+    component: () => import('@/views/system/logs'),
+  },
+};
+
+const createRouter = (router) => new Router({
+  // mode: 'history',
+  routes: router,
 })
+
+const router = createRouter(constantRouterMap)
+
+export function resetRouter(router) {
+  const newRouter = createRouter(router)
+  router.matcher = newRouter.matcher
+}
+
+export default router
+// 异步挂载的路由
+// export default new Router({
+//   // mode: 'history', //后端支持可开
+//   scrollBehavior: () => ({ y: 0 }),
+//   routes: constantRouterMap
+// })
 

@@ -27,6 +27,7 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import logo from '@/assets/logo.png'
+import store from "../../../store";
 
 export default {
   components: {
@@ -40,7 +41,11 @@ export default {
     ])
   },
   mounted:function(){
-    this.$store.dispatch('setAvatar',logo)
+    if(store.getters.avatar.length === 0) {
+      this.$store.dispatch('setAvatar',logo)
+    } else {
+      this.$store.dispatch('setAvatar',store.getters.avatar)
+    }
   },
   methods: {
     toggleSideBar() {

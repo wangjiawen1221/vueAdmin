@@ -1,6 +1,16 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+import { resetRouter } from '@/router'
+
+export function resetTokenAndClearUser() {
+  // 退出登陆 清除用户资料
+  localStorage.setItem('token', '')
+  localStorage.setItem('avatar', '')
+  localStorage.setItem('name', '')
+  // 重设路由
+  resetRouter()
+}
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {

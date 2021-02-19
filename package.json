@@ -13,11 +13,12 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "axios": "0.17.1",
+    "@riophae/vue-treeselect": "0.0.37",
+    "axios": "^0.21.1",
     "element-ui": "^2.4.7",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
-    "nprogress": "0.2.0",
+    "nprogress": "^0.2.0",
     "vue": "2.5.10",
     "vue-router": "3.0.1",
     "vuex": "3.0.1"

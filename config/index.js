@@ -12,17 +12,16 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://192.168.10.9/vueApi/public/',
+        target: 'http://www.laravel6.cc/',
         changeOrigin: true,
         secure: false,
         pathRewrite: {
           '^/api': '/api'
         }
-
       },
     },
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
